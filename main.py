@@ -10,6 +10,10 @@ import pygame
 import time
 import random
 
+from player import Player
+from pipe import Pipes
+
+
 background_color = (0,0,0)
 green = pygame.colordict.THECOLORS.get("chartreuse")
 red = pygame.colordict.THECOLORS.get("crimson")
@@ -26,42 +30,6 @@ pygame.font.init()
 my_font = pygame.font.SysFont('Candara', 60)
 
 score_rect = pygame.Rect(350, 10, 100, 40)
-
-
-class Player:
-    def __init__(self):
-        pass
-    x = 120
-    y = 200.0
-    vert_speed = 0
-    player_rect = pygame.Rect(x,y, 40, 20)
-
-    def set_y(self, y):
-        self.y = y
-        self.player_rect.y = y
-
-class Pipes:
-    def __init__(self):
-        pass
-    x = 750 #this is the left edge of the pipe
-    y = 200 # this is the middle of the two pipes
-    width = 100 # this is the space between pipes
-    top_pipe = pygame.Rect(x, 0, 50, y-(width/2))
-    bottom_pipe = pygame.Rect(x, y+(width/2), 50, 400-(y-(width/2)))
-    scored = False
-    def draw_pipe(self): #this works right now
-        self.top_pipe = self.top_pipe.move(self.x, 0) #make new pipe in new posiiont for collision bullshit
-        self.top_pipe.update(self.x, 0, 50, self.y-(self.width/2)) #make pipe appear in right place.
-        self.bottom_pipe = self.bottom_pipe.move(self.x, 0)
-        self.bottom_pipe.update(self.x, self.y+(self.width/2), 50, 400-(self.y-(self.width/2)))
-        ##okay so this draws it, but what i want to do, is the difference of them is between the width
-        #so x is fine, top  matters, as does y, im not sure height is important
-        #top pipe, always x, always 0 top, always 50 width, height is y
-        pygame.draw.rect(screen, green, self.top_pipe)#draw top pipe
-        #bottom pipe, always x, ? top, always 50 width, height is 400 - top point, or just make it massive
-        pygame.draw.rect(screen, green, self.bottom_pipe)#draw bottom pipe
-    def get_pipes(self):
-        return [self.top_pipe,self.bottom_pipe]
 
 ##TODO
 """
@@ -121,7 +89,7 @@ def main():
             player.vert_speed = 0
 
         for pipe in pipes:
-            pipe.draw_pipe()
+            pipe.draw_pipe(screen)
         pygame.draw.rect(screen, (255,255,0), player.player_rect)
         pygame.draw.rect(screen, mistyrose, score_rect)
         text_surface = my_font.render(str(score), False, navy)
